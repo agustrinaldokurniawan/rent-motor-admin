@@ -1,43 +1,29 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
 import Container from "../../components/container/container";
 import Motors from "../../service/motor";
+import ListMotorComponent from "../../components/motors/list";
 
 export default function ListMotor({ navigation }) {
-  const motorService = new Motors()
+  const motorService = new Motors();
 
-  const [motors, setMotors] = useState([])
+  const [motors, setMotors] = useState([]);
 
   useEffect(() => {
-    fetchMotors()
-  }, [])
+    fetchMotors();
+  }, []);
 
   const fetchMotors = () => {
-    const motors = motorService.getMotors()
-    setMotors(motors)
-  }
-
-  const onPressDetail = () => {
-    navigation.navigate('DetailMotor', {
-      motor: {
-        name: "Kawasaki Super"
-      }
-    })
-  }
+    const motors = motorService.getMotors();
+    setMotors(motors);
+  };
 
   return (
     <Container>
       <View>
         <Text>List Motor</Text>
-        {
-          motors.map((item, key) =>
-            <View key={key}>
-              <Text>{item.name}</Text>
-            </View>
-          )
-        }
-        <Button title="Detail" onPress={onPressDetail} />
+        <ListMotorComponent motors={motors} navigation={navigation} />
       </View>
     </Container>
-  )
+  );
 }

@@ -5,7 +5,7 @@ export const style = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingRight: 25,
-    paddingBottom: 50,
-    paddingLeft: 25
-  }
-})
+    paddingBottom: 20,
+    paddingLeft: 25,
+  },
+});

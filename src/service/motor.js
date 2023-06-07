@@ -1,6 +1,8 @@
+import { motors as data } from "../dummy/motors";
+
 export default class Motors {
-  async getMotors() {
-    const motors = import('../dummy/motors.json')
-    return motors
+  getMotors() {
+    const motors = data;
+    return motors;
   }
 }
