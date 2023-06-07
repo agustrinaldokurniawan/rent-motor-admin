@@ -30,15 +30,14 @@ export default function MainTabs() {
         tabBarIconStyle: {
           width: 50,
         },
-        tabBarItemStyle: {
-
-        }
+        headerShown: false
       }}
     >
       <Tab.Screen
         name="Statistic"
         component={HomeScreen}
         options={{
+          title: 'Home',
           tabBarLabel: ({ focused }) => (
             <Text style={{ alignItems: 'center', padding: 0, margin: 0 }}>{focused ? 'Home' : ''}</Text>
           ),
@@ -53,6 +52,7 @@ export default function MainTabs() {
         name="ListMotor"
         component={ListMotor}
         options={{
+          title: 'Motors',
           tabBarLabel: ({ focused }) => (
             <Text>{focused ? 'Motors' : ''}</Text>
           ),
@@ -67,6 +67,7 @@ export default function MainTabs() {
         name="ListOrder"
         component={ListOrder}
         options={{
+          title: 'Orders',
           tabBarLabel: ({ focused }) => (
             <Text>{focused ? 'Orders' : ''}</Text>
           ),

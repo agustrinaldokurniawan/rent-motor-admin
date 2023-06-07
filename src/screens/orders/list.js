@@ -1,5 +1,6 @@
 import React from "react"
 import { View, Text, Button } from "react-native";
+import Container from "../../components/container/container";
 
 export default function ListOrder({ navigation }) {
   const onPressDetail = () => {
@@ -10,9 +11,11 @@ export default function ListOrder({ navigation }) {
     })
   }
   return (
-    <View>
-      <Text>List Order</Text>
-      <Button title="Detail" onPress={onPressDetail} />
-    </View>
+    <Container>
+      <View>
+        <Text>List Order</Text>
+        <Button title="Detail" onPress={onPressDetail} />
+      </View>
+    </Container>
   )
 }

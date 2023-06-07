@@ -11,7 +11,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='MainTab' component={MainTabs} />
+        <Stack.Screen name='MainTab' component={MainTabs} options={{
+          headerShown: false
+        }} />
 
         <Stack.Screen name="DetailMotor" component={DetailMotor} />
         <Stack.Screen name="DetailOrder" component={DetailOrder} />
