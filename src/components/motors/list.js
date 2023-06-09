@@ -1,7 +1,7 @@
 import { FlatList, Text, View } from "react-native";
 import ItemListMotor from "./item-list";
 
-export default function ListMotorComponent({ motors, navigation }) {
+export default function ListMotorComponent({ motors, navigation, style }) {
   return motors.length ? (
     <View>
       <FlatList
@@ -10,7 +10,8 @@ export default function ListMotorComponent({ motors, navigation }) {
           <ItemListMotor motor={item} navigation={navigation} />
         )}
         keyExtractor={(_, index) => index}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        style={[style]}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   ) : (

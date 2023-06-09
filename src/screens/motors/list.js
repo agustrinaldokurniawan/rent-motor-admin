@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import Container from "../../components/container/container";
 import Motors from "../../service/motor";
 import ListMotorComponent from "../../components/motors/list";
+import InterText from "../../components/typography/inter-text";
+import { styles } from "./list.style";
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function ListMotor({ navigation }) {
   const motorService = new Motors();
@@ -20,9 +24,8 @@ export default function ListMotor({ navigation }) {
 
   return (
     <Container>
-      <View>
-        <Text>List Motor</Text>
-        <ListMotorComponent motors={motors} navigation={navigation} />
+      <View style={styles.mainView}>
+        <ListMotorComponent motors={motors} navigation={navigation} style={styles.list} />
       </View>
     </Container>
   );

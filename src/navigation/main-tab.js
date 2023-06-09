@@ -6,8 +6,9 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from "../screens/home";
 import ListMotor from "../screens/motors/list";
 import ListOrder from "../screens/orders/list";
-import { Text } from "react-native";
 import MainTabItem from "./main-tab-item";
+import InterText from "../components/typography/inter-text";
+import ListMotorHeader from "../components/header/motor/list";
 
 const Tab = createBottomTabNavigator()
 
@@ -18,11 +19,7 @@ export default function MainTabs() {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: '#FFF',
-          margin: 20,
-          overflow: "hidden",
-          position: 'absolute',
-          borderRadius: 100,
-          height: 60,
+          height: 75
         },
         tabBarActiveTintColor: '#E57C23',
         tabBarInactiveTintColor: '#858d8f',
@@ -30,7 +27,6 @@ export default function MainTabs() {
         tabBarIconStyle: {
           width: 50,
         },
-        headerShown: false
       }}
     >
       <Tab.Screen
@@ -39,7 +35,9 @@ export default function MainTabs() {
         options={{
           title: 'Home',
           tabBarLabel: ({ focused }) => (
-            <Text style={{ alignItems: 'center', padding: 0, margin: 0 }}>{focused ? 'Home' : ''}</Text>
+            <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
+              {focused ? 'Home' : ''}
+            </InterText>
           ),
           tabBarIcon: ({ color, size, focused }) => (
             <MainTabItem focused={focused}>
@@ -53,8 +51,11 @@ export default function MainTabs() {
         component={ListMotor}
         options={{
           title: 'Motors',
+          header: (props) => <ListMotorHeader {...props}/>,
           tabBarLabel: ({ focused }) => (
-            <Text>{focused ? 'Motors' : ''}</Text>
+            <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
+              {focused ? 'Motors' : ''}
+            </InterText>
           ),
           tabBarIcon: ({ color, size, focused }) => (
             <MainTabItem focused={focused}>
@@ -69,7 +70,9 @@ export default function MainTabs() {
         options={{
           title: 'Orders',
           tabBarLabel: ({ focused }) => (
-            <Text>{focused ? 'Orders' : ''}</Text>
+            <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
+              {focused ? 'Orders' : ''}
+            </InterText>
           ),
           tabBarIcon: ({ color, size, focused }) => (
             <MainTabItem focused={focused}>

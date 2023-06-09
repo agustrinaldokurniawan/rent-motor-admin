@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-export default function MainTabItem({ children, focused }) {
+export default function MainTabItem({ children }) {
   return (
     <View>
       {children}

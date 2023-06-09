@@ -1,25 +1,37 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./item-list.styles";
+import InterText from "../typography/inter-text";
 
 export default function ItemListMotor({ motor, navigation }) {
+
+  const transformPrice = (price) => {
+    return price.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR'
+    })
+  }
+
   const onPressDetail = () => {
     navigation.navigate("DetailMotor", {
       motor,
     });
   };
+
   return (
-    <TouchableOpacity onPress={onPressDetail}>
-      <View>
+    <TouchableOpacity
+      onPress={onPressDetail}
+      style={styles.container}
+    >
+      <View style={styles.leftPanel}>
         <Image
           source={{ uri: motor.image }}
-          style={{ width: 100, height: 100 }}
+          style={styles.image}
         />
         <View>
-          <Text>{motor.name}</Text>
-          <Text>{motor.type}</Text>
+          <InterText variant={'bold'} style={styles.name}>{motor.name}</InterText>
+          <InterText>{motor.type}</InterText>
+          <InterText>{transformPrice(motor.price)}</InterText>
         </View>
-      </View>
-      <View>
-        <Text>{motor.price}</Text>
       </View>
     </TouchableOpacity>
   );
