@@ -16,8 +16,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scrollContainer: {
-    marginBottom: 100,
-    paddingBottom: 100
+    paddingBottom: 75,
+    gap: 20
   },
   formContainer: {
     flex: 1,
@@ -49,6 +49,8 @@ export const styles = StyleSheet.create({
     width: 100,
     borderRadius: 10,
     backgroundColor: 'gray',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   changeImageButton: {
     paddingVertical: 10,

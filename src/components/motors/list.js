@@ -1,8 +1,8 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 import ItemListMotor from "./item-list";
 
 export default function ListMotorComponent({ motors, navigation, style }) {
-  return motors.length ? (
+  return (
     <View>
       <FlatList
         data={motors}
@@ -14,9 +14,5 @@ export default function ListMotorComponent({ motors, navigation, style }) {
         showsVerticalScrollIndicator={false}
       />
     </View>
-  ) : (
-    <View>
-      <Text>Tidak ada motor yang tersedia saat ini</Text>
-    </View>
-  );
+  )
 }

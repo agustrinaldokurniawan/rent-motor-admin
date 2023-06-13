@@ -24,4 +24,11 @@ export const styles = StyleSheet.create({
     height: 75,
     borderRadius: 10
   },
+  textName: {
+    textTransform: 'capitalize'
+  },
+  textType: {
+    fontStyle: 'italic',
+    textTransform: 'capitalize'
+  }
 })

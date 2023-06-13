@@ -9,6 +9,7 @@ import ListOrder from "../screens/orders/list";
 import MainTabItem from "./main-tab-item";
 import InterText from "../components/typography/inter-text";
 import ListMotorHeader from "../components/header/motor/list";
+import ListOrderHeader from "../components/header/order/list";
 
 const Tab = createBottomTabNavigator()
 
@@ -51,7 +52,7 @@ export default function MainTabs() {
         component={ListMotor}
         options={{
           title: 'Motors',
-          header: (props) => <ListMotorHeader {...props}/>,
+          header: (props) => <ListMotorHeader {...props} />,
           tabBarLabel: ({ focused }) => (
             <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
               {focused ? 'Motors' : ''}
@@ -69,6 +70,7 @@ export default function MainTabs() {
         component={ListOrder}
         options={{
           title: 'Orders',
+          header: (props) => <ListOrderHeader {...props} />,
           tabBarLabel: ({ focused }) => (
             <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
               {focused ? 'Orders' : ''}

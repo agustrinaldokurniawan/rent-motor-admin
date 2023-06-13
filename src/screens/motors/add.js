@@ -1,76 +1,153 @@
-import React, { useState } from "react";
-import { Image, KeyboardAvoidingView, ScrollView, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import Container from "../../components/container/container";
 import InterText from "../../components/typography/inter-text";
 import { styles } from "./add.style";
 import InputText from "../../components/input-text";
 import Picker from "../../components/picker";
+import { durationOptions, typeMotorOptions } from "./options";
+import * as ImagePicker from 'expo-image-picker';
+import { imageUriBlob } from "../../utils/imageUriBlob";
+import { uploadImageToFirebase } from "../../utils/uploadImageToFirebase";
+import { isSubmitValid } from "./validator/submitValidator";
+import useSubmitMotorApi from "./api/submit";
+import { fetchImageFromFirebase } from "../../utils/fetchImageFromFirebase";
 
-export default function AddMotor({ navigation }) {
+export default function AddMotor({ navigation, route }) {
+  const [motor, setMotor] = useState(route?.params?.motor)
+  const { mutationSubmit } = useSubmitMotorApi()
+
   const [formState, setFromState] = useState({
     name: '',
-    type: '',
-    duration: '',
+    type: typeMotorOptions[0].value,
+    duration: durationOptions[0].value,
     price: '',
-    merk: ''
+    production: '',
+    image: '',
+    imageFile: ''
   })
 
-  const typeMotorOptions = [
-    {
-      label: 'Matic',
-      value: 'matic'
-    },
-    {
-      label: 'Manual',
-      value: 'manual'
-    }
-  ]
+  useEffect(() => {
+    setEditValue()
+  }, [route])
 
-  const durationOptions = [
-    {
-      label: 'Day',
-      value: 'day'
-    },
-    {
-      label: 'Month',
-      value: 'month'
+  useEffect(() => {
+    setHeaderOptions()
+  }, [navigation, motor])
+
+  useEffect(() => {
+    if (mutationSubmit.isSuccess) {
+      navigation.navigate('ListMotor')
     }
-  ]
+  }, [mutationSubmit.isSuccess])
+
+  const setEditValue = async () => {
+    if (motor) {
+      console.log({ motor })
+      let imageUri = ''
+      const resp = await fetchImageFromFirebase(motor.image)
+      if (typeof resp === 'string') {
+        imageUri = resp
+      }
+
+      setFromState({
+        name: motor.name,
+        type: motor.type,
+        duration: motor.duration,
+        price: String(motor.price),
+        production: motor.production,
+        image: imageUri
+      })
+    }
+  }
+
+  const setHeaderOptions = () => {
+    if (motor) {
+      navigation.setOptions({
+        title: motor.name,
+      })
+    }
+  }
 
   const onChangeForm = (key, value) => {
     setFromState({ ...formState, [key]: value })
   }
 
-  const dummyImage = "https://imgcdn.oto.com/medium/gallery/exterior/73/2569/honda-vario-160-slant-front-view-full-image-809796.jpg"
+  const pickImageAsync = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      quality: 1
+    })
+
+    if (!result.canceled) {
+      setFromState({
+        ...formState,
+        image: result.assets[0].uri
+      })
+    } else {
+      console.log('didnt select any image')
+    }
+  }
+
+  const onSubmit = () => {
+    if (motor) onSubmitEdit()
+    if (!motor) onSubtmitAdd()
+  }
+
+  const onSubtmitAdd = async () => {
+    if (typeof isSubmitValid(formState) === "boolean") {
+      const blob = await imageUriBlob(formState.image)
+      const resp = await uploadImageToFirebase(blob, formState.image)
+      const payload = {
+        ...formState,
+        image: resp,
+      }
+      mutationSubmit.mutate(payload)
+    } else {
+      console.log(isSubmitValid())
+    }
+  }
+
+  const onSubmitEdit = () => {
+    console.log('submit edit')
+  }
 
   return (
-    <Container>
+    <Container loading={mutationSubmit.isLoading}>
       <View style={styles.mainView}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          // style={[styles.formContainer]}
           keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 100}
         >
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles.imageView} >
-              <Image source={{ uri: 'dummyImage' }} style={styles.image} />
-              <TouchableOpacity style={styles.changeImageButton}>
+              {
+                formState.image
+                  ? <Image source={{ uri: formState.image }} style={styles.image} />
+                  : <View style={styles.image}><InterText >No Image</InterText></View>
+              }
+              <TouchableOpacity style={styles.changeImageButton} onPress={pickImageAsync}>
                 <InterText style={styles.changeImageText}>Ganti Gambar</InterText>
               </TouchableOpacity>
             </View>
             <InputText placeholder="Nama Motors"
-              onValueChange={(value) => {
+              onChangeText={(value) => {
                 onChangeForm('name', value)
-              }} />
+              }}
+              value={formState.name}
+            />
             <Picker
               selectedValue={formState.type}
               onValueChange={(value) => {
                 onChangeForm('type', value)
               }}
+              value={formState.type}
               options={typeMotorOptions} />
 
             <Picker
               selectedValue={formState.duration}
+              value={formState.duration}
               onValueChange={(value) => {
                 onChangeForm('duration', value)
               }}
@@ -78,18 +155,22 @@ export default function AddMotor({ navigation }) {
             <InputText
               placeholder="Harga"
               keyboardType='numeric'
-              onValueChange={(value) => {
+              value={formState.price}
+              onChangeText={(value) => {
                 onChangeForm('price', value)
               }} />
             <InputText
               placeholder="Merk"
-              onValueChange={(value) => {
-                onChangeForm('merk', value)
+              value={formState.production}
+              onChangeText={(value) => {
+                onChangeForm('production', value)
               }} />
           </ScrollView>
         </KeyboardAvoidingView>
-        <TouchableOpacity style={styles.addButton}>
-          <InterText style={styles.addButtonText} variant={'bold'}>Tambahkan Motor</InterText>
+        <TouchableOpacity style={styles.addButton} onPress={onSubmit}>
+          <InterText style={styles.addButtonText} variant={'bold'}>
+            {motor ? 'Perbaharui Motor' : 'Tambahkan Motor'}
+          </InterText>
         </TouchableOpacity>
       </View>
     </Container>

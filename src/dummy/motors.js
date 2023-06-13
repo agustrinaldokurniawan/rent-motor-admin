@@ -5,7 +5,7 @@ export const motors = [
     name: "Honda Vario 160",
     price: 120000,
     duration: "day",
-    type: "Matic",
+    type: "matic",
     production: "Honda",
   },
   {
@@ -14,7 +14,7 @@ export const motors = [
     name: "Honda Vario 160",
     price: 120000,
     duration: "day",
-    type: "Matic",
+    type: "matic",
     production: "Honda",
   },
   {
@@ -23,7 +23,7 @@ export const motors = [
     name: "Honda Vario 160",
     price: 120000,
     duration: "day",
-    type: "Matic",
+    type: "matic",
     production: "Honda",
   },
   {
@@ -32,7 +32,7 @@ export const motors = [
     name: "Honda Vario 160",
     price: 120000,
     duration: "day",
-    type: "Matic",
+    type: "matic",
     production: "Honda",
   },
   {
@@ -41,7 +41,7 @@ export const motors = [
     name: "Honda Vario 160",
     price: 120000,
     duration: "day",
-    type: "Matic",
+    type: "manual",
     production: "Honda",
   },
 ];

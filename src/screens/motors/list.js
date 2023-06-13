@@ -1,31 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text } from "react-native";
 import Container from "../../components/container/container";
-import Motors from "../../service/motor";
 import ListMotorComponent from "../../components/motors/list";
-import InterText from "../../components/typography/inter-text";
 import { styles } from "./list.style";
-
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import useListMotorApi from "./api/list";
+import EmptyLottie from "../../components/lottie/empty";
+import LoadingLottie from "../../components/lottie/loading";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ListMotor({ navigation }) {
-  const motorService = new Motors();
-
-  const [motors, setMotors] = useState([]);
+  const isFocused = useIsFocused()
+  const { data, isLoading, error, refetch } = useListMotorApi()
 
   useEffect(() => {
-    fetchMotors();
-  }, []);
+    refetch()
+  }, [isFocused])
 
-  const fetchMotors = () => {
-    const motors = motorService.getMotors();
-    setMotors(motors);
-  };
+  if (error) {
+    return (
+      <View>
+        <Text>{error}</Text>
+      </View>
+    )
+  }
+
+  if (isLoading) {
+    return <LoadingLottie />
+  }
+
+  if (!data?.length) {
+    return <EmptyLottie />
+  }
 
   return (
     <Container>
       <View style={styles.mainView}>
-        <ListMotorComponent motors={motors} navigation={navigation} style={styles.list} />
+        <ListMotorComponent motors={data} navigation={navigation} style={styles.list} />
       </View>
     </Container>
   );

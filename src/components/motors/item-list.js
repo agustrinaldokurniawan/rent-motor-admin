@@ -1,14 +1,22 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { styles } from "./item-list.styles";
 import InterText from "../typography/inter-text";
+import { transformPrice } from "../../utils/idrPrice";
+import { useEffect, useState } from "react";
+import { fetchImageFromFirebase } from "../../utils/fetchImageFromFirebase";
 
 export default function ItemListMotor({ motor, navigation }) {
+  const [imageUri, setImageUri] = useState('No Image')
 
-  const transformPrice = (price) => {
-    return price.toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR'
-    })
+  useEffect(() => {
+    fetchImage()
+  }, [])
+
+  const fetchImage = async () => {
+    const resp = await fetchImageFromFirebase(motor?.image)
+    if (typeof resp === 'string') {
+      setImageUri(resp)
+    }
   }
 
   const onPressDetail = () => {
@@ -24,13 +32,13 @@ export default function ItemListMotor({ motor, navigation }) {
     >
       <View style={styles.leftPanel}>
         <Image
-          source={{ uri: motor.image }}
+          source={{ uri: imageUri }}
           style={styles.image}
         />
         <View>
-          <InterText variant={'bold'} style={styles.name}>{motor.name}</InterText>
-          <InterText>{motor.type}</InterText>
-          <InterText>{transformPrice(motor.price)}</InterText>
+          <InterText variant={'bold'} style={styles.textName}>{motor.name}</InterText>
+          <InterText style={styles.textType}>{motor.type}</InterText>
+          <InterText style={styles.textPrice}>{transformPrice(motor.price)}</InterText>
         </View>
       </View>
     </TouchableOpacity>
