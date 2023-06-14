@@ -21,7 +21,10 @@ export default function ItemListMotor({ motor, navigation }) {
 
   const onPressDetail = () => {
     navigation.navigate("DetailMotor", {
-      motor,
+      motor: {
+        ...motor,
+        id: motor?.id
+      }
     });
   };
 

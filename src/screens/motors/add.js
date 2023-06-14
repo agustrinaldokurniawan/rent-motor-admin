@@ -12,10 +12,12 @@ import { uploadImageToFirebase } from "../../utils/uploadImageToFirebase";
 import { isSubmitValid } from "./validator/submitValidator";
 import useSubmitMotorApi from "./api/submit";
 import { fetchImageFromFirebase } from "../../utils/fetchImageFromFirebase";
+import useUpdateMotorApi from "./api/update";
 
 export default function AddMotor({ navigation, route }) {
   const [motor, setMotor] = useState(route?.params?.motor)
   const { mutationSubmit } = useSubmitMotorApi()
+  const { mutationUpdate } = useUpdateMotorApi()
 
   const [formState, setFromState] = useState({
     name: '',
@@ -41,9 +43,22 @@ export default function AddMotor({ navigation, route }) {
     }
   }, [mutationSubmit.isSuccess])
 
+
+  useEffect(() => {
+    if (mutationUpdate.isSuccess) {
+      console.log(mutationUpdate.variables)
+      // navigation.navigate('ListMotor')
+      navigation.navigate('DetailMotor', {
+        motor: {
+          ...mutationUpdate.variables.payload,
+          id: mutationUpdate.variables.id
+        }
+      })
+    }
+  }, [mutationUpdate.isSuccess])
+
   const setEditValue = async () => {
     if (motor) {
-      console.log({ motor })
       let imageUri = ''
       const resp = await fetchImageFromFirebase(motor.image)
       if (typeof resp === 'string') {
@@ -107,12 +122,29 @@ export default function AddMotor({ navigation, route }) {
     }
   }
 
-  const onSubmitEdit = () => {
-    console.log('submit edit')
+  const onSubmitEdit = async () => {
+    if (typeof isSubmitValid(formState) === "boolean") {
+      let payload = {}
+      if (formState.image.includes('/')) {
+        const blob = await imageUriBlob(formState.image)
+        const resp = await uploadImageToFirebase(blob, formState.image)
+        payload = {
+          ...formState,
+          image: resp,
+        }
+      } else {
+        payload = {
+          ...formState,
+        }
+      }
+      mutationUpdate.mutate({ payload, id: motor.id })
+    } else {
+      console.log(isSubmitValid())
+    }
   }
 
   return (
-    <Container loading={mutationSubmit.isLoading}>
+    <Container loading={mutationSubmit.isLoading || mutationUpdate.isLoading}>
       <View style={styles.mainView}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
