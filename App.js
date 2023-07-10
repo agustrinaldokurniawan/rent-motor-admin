@@ -1,12 +1,15 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import Navigation from "./src/navigation";
+import { NativeBaseProvider } from "native-base";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Navigation />
-    </QueryClientProvider>
+    <NativeBaseProvider>
+      <QueryClientProvider client={queryClient}>
+        <Navigation />
+      </QueryClientProvider>
+    </NativeBaseProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 import HomeScreen from "../screens/home";
 import ListMotor from "../screens/motors/list";
@@ -11,7 +11,7 @@ import InterText from "../components/typography/inter-text";
 import ListMotorHeader from "../components/header/motor/list";
 import ListOrderHeader from "../components/header/order/list";
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 export default function MainTabs() {
   return (
@@ -19,12 +19,12 @@ export default function MainTabs() {
       initialRouteName="Statistic"
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: '#FFF',
-          height: 75
+          backgroundColor: "#FFF",
+          height: 75,
         },
-        tabBarActiveTintColor: '#E57C23',
-        tabBarInactiveTintColor: '#858d8f',
-        tabBarLabelPosition: 'beside-icon',
+        tabBarActiveTintColor: "#E57C23",
+        tabBarInactiveTintColor: "#858d8f",
+        tabBarLabelPosition: "beside-icon",
         tabBarIconStyle: {
           width: 50,
         },
@@ -34,28 +34,28 @@ export default function MainTabs() {
         name="Statistic"
         component={HomeScreen}
         options={{
-          title: 'Home',
+          title: "QR",
           tabBarLabel: ({ focused }) => (
-            <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
-              {focused ? 'Home' : ''}
+            <InterText variant={"bold"} style={{ color: focused && "#E57C23" }}>
+              {focused ? "QR" : ""}
             </InterText>
           ),
           tabBarIcon: ({ color, size, focused }) => (
             <MainTabItem focused={focused}>
-              <MaterialIcons name="home-filled" color={color} size={size} />
+              <MaterialIcons name="qr-code" color={color} size={size} />
             </MainTabItem>
-          )
+          ),
         }}
       />
       <Tab.Screen
         name="ListMotor"
         component={ListMotor}
         options={{
-          title: 'Motors',
+          title: "Motors",
           header: (props) => <ListMotorHeader {...props} />,
           tabBarLabel: ({ focused }) => (
-            <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
-              {focused ? 'Motors' : ''}
+            <InterText variant={"bold"} style={{ color: focused && "#E57C23" }}>
+              {focused ? "Motors" : ""}
             </InterText>
           ),
           tabBarIcon: ({ color, size, focused }) => (
@@ -69,11 +69,11 @@ export default function MainTabs() {
         name="ListOrder"
         component={ListOrder}
         options={{
-          title: 'Orders',
+          title: "Orders",
           header: (props) => <ListOrderHeader {...props} />,
           tabBarLabel: ({ focused }) => (
-            <InterText variant={'bold'} style={{ color: focused && '#E57C23' }}>
-              {focused ? 'Orders' : ''}
+            <InterText variant={"bold"} style={{ color: focused && "#E57C23" }}>
+              {focused ? "Orders" : ""}
             </InterText>
           ),
           tabBarIcon: ({ color, size, focused }) => (
@@ -84,5 +84,5 @@ export default function MainTabs() {
         }}
       />
     </Tab.Navigator>
-  )
+  );
 }
