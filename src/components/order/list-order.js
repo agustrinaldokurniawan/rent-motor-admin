@@ -12,7 +12,7 @@ export default function ListOrder({ order }) {
   };
 
   return (
-    <VStack space={8} p={2}>
+    <VStack space={8}>
       {order.map((item, key) => (
         <OrderItem
           key={key}

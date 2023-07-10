@@ -81,6 +81,7 @@ export default function MainTabs() {
               <FontAwesome5 name="shopping-bag" color={color} size={size} />
             </MainTabItem>
           ),
+          unmountOnBlur: true,
         }}
       />
     </Tab.Navigator>

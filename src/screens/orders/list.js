@@ -1,46 +1,89 @@
-import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import Container from "../../components/container/container";
-import Lottie from "lottie-react-native";
-import EmptyLottie from "../../components/lottie/empty";
+import { Icon, Input, Pressable, Text, VStack } from "native-base";
+import Layout from "../../components/layout";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
+import { useEffect, useState } from "react";
 import { listOrder } from "../../api/order";
+import ListOrder from "../../components/order/list-order";
 import LoadingLottie from "../../components/lottie/loading";
-import ListOrderComponent from "../../components/order/list-order";
+import Empty from "../../components/empty";
 
-export default function ListOrder({ navigation }) {
+export default function OrderScreen({ navigation }) {
+  const [keyword, setKeyword] = useState("");
+
+  const { mutationGetListOrder } = listOrder();
   const [orders, setOrders] = useState([]);
-  const { data, error, isLoading } = listOrder();
+  const [filteredOrders, setFilteredOrders] = useState([]);
 
-  const onPressDetail = () => {
-    navigation.navigate("DetailOrder", {
-      order: {
-        id: "#123",
-      },
-    });
-  };
+  useEffect(() => {
+    mutationGetListOrder.mutate();
+  }, []);
 
-  if (isLoading) {
-    return <LoadingLottie />;
-  }
+  useEffect(() => {
+    if (mutationGetListOrder.data) {
+      setOrders(mutationGetListOrder.data);
+    }
+  }, [mutationGetListOrder.isSuccess]);
 
-  if (!data.length) {
-    return <EmptyLottie />;
+  useEffect(() => {
+    const filtered = orders.filter((item) =>
+      JSON.stringify(item)
+        .toLocaleLowerCase()
+        .includes(keyword.toLocaleLowerCase())
+    );
+    setFilteredOrders(filtered);
+  }, [keyword]);
+
+  if (mutationGetListOrder.isLoading) {
+    return (
+      <Layout>
+        <LoadingLottie />
+      </Layout>
+    );
   }
 
   return (
-    <Container>
-      <View>
-        <ListOrderComponent order={data} />
-      </View>
-    </Container>
+    <Layout>
+      <VStack space={8} pb={12}>
+        <Input
+          InputLeftElement={
+            <Icon
+              as={<EvilIcons name="search" />}
+              size={5}
+              ml="2"
+              color="muted.400"
+            />
+          }
+          placeholder="Nomor Order"
+          borderRadius={"xl"}
+          onChangeText={setKeyword}
+          value={keyword}
+          InputRightElement={
+            <Pressable
+              onPress={() => {
+                setKeyword("");
+              }}
+            >
+              <Icon
+                as={<EvilIcons name="close" />}
+                size={5}
+                mr="2"
+                color="muted.400"
+              />
+            </Pressable>
+          }
+        />
+        <ListOrder order={keyword ? filteredOrders : orders} />
+        {keyword && !filteredOrders.length ? (
+          <Empty>
+            <Text color={"muted.400"}>Tidak ada order yang sesuai.</Text>
+            <Text color={"muted.400"}>
+              Silahkan masukkan kata kunci yang lain.
+            </Text>
+          </Empty>
+        ) : (
+          ""
+        )}
+      </VStack>
+    </Layout>
   );
 }
-
-const styles = StyleSheet.create({
-  containerView: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
-    height: "100%",
-  },
-});

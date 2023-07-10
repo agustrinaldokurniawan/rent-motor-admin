@@ -1,4 +1,4 @@
-// import moment from "moment";
+import moment from "moment";
 import { HStack, Heading, Pressable, Text, VStack } from "native-base";
 
 export default function OrderItem({ order, onPress }) {
@@ -14,7 +14,7 @@ export default function OrderItem({ order, onPress }) {
       <HStack justifyContent={"space-between"} alignItems={"center"}>
         <Heading size={"sm"}>{order.orderNumber}</Heading>
         <VStack>
-          {/* <Text>{moment.unix(order.pickupDate).format("LLL")}</Text> */}
+          <Text>{moment.unix(order.pickupDate).format("LLL")}</Text>
           <Text>{order.duration} hari</Text>
         </VStack>
       </HStack>
